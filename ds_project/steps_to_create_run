@@ -1,0 +1,121 @@
+mkdir -p ds_project/{data,scripts,models,results}
+cd ds_project
+
+🧪 Step 2: Create Sample CSV Dataset
+Create data/raw.csv:
+
+
+cat <<EOF > data/raw.csv
+Name,Marks
+Alice,85
+Bob,72
+Charlie,90
+EOF
+🐍 Step 3: Create Python Scripts
+🔹 scripts/preprocess.py
+
+# scripts/preprocess.py
+import pandas as pd
+import sys
+
+df = pd.read_csv('data/raw.csv')
+df['Marks'] = df['Marks'] + 1  # simulate "cleaning"
+df.to_csv('data/clean.csv', index=False)
+print("✅ Preprocessing complete.")
+🔹 scripts/train.py
+
+# scripts/train.py
+import pandas as pd
+import pickle
+
+df = pd.read_csv('data/clean.csv')
+avg = df['Marks'].mean()
+
+with open('models/model.pkl', 'wb') as f:
+    pickle.dump({'avg_marks': avg}, f)
+
+print(f"✅ Model trained. Average: {avg}")
+🔹 scripts/evaluate.py
+
+# scripts/evaluate.py
+import pickle
+import json
+
+with open('models/model.pkl', 'rb') as f:
+    model = pickle.load(f)
+
+metrics = {
+    'average_marks': model['avg_marks'],
+    'status': 'OK'
+}
+
+with open('results/metrics.json', 'w') as f:
+    json.dump(metrics, f)
+
+print("✅ Evaluation saved.")
+🔹 scripts/plot.py
+
+# scripts/plot.py
+import json
+import matplotlib.pyplot as plt
+
+with open('results/metrics.json') as f:
+    metrics = json.load(f)
+
+plt.bar(['Average'], [metrics['average_marks']])
+plt.title("Student Average Marks")
+plt.savefig('results/plot.png')
+print("✅ Plot generated.")
+Install matplotlib if not already:
+
+
+pip install matplotlib
+⚙️ Step 4: Create the Makefile
+Create Makefile in ds_project/:
+
+
+.PHONY: all clean
+
+all: results/plot.png
+
+data/clean.csv: data/raw.csv
+	python3 scripts/preprocess.py
+
+models/model.pkl: data/clean.csv
+	python3 scripts/train.py
+
+results/metrics.json: models/model.pkl
+	python3 scripts/evaluate.py
+
+results/plot.png: results/metrics.json
+	python3 scripts/plot.py
+
+clean:
+	rm -f data/clean.csv models/model.pkl results/*.*
+▶️ Step 5: Run the Pipeline
+From ds_project/ directory:
+
+
+make
+You should see:
+
+
+✅ Preprocessing complete.
+✅ Model trained. Average: ...
+✅ Evaluation saved.
+✅ Plot generated.
+Generated:
+
+data/clean.csv
+
+models/model.pkl
+
+results/metrics.json
+
+results/plot.png
+
+🧼 Clean Up
+
+make clean
+This deletes all generated outputs.
+
