@@ -1,0 +1,22 @@
+
+sudo chmod +x run_iot_pipeline.sh
+
+## Run Manually
+
+sudo pip3 install pandas matplotlib
+
+sudo ./run_iot_pipeline.sh
+
+## Cron Job to run on a Schedule
+
+sudo crontab -e 
+
+*/2 * * * * /home/sree/iot_cron_project/run_iot_pipeline.sh >> /home/sree/iot_cron_project/cron.log 2>&1 
+
+This runs for ever 2 minutes. 
+
+sudo crontab -l
+
+sudo cat cron.log 
+
+sudo grep CRON /var/log/syslog/
