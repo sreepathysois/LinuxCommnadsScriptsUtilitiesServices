@@ -11,7 +11,7 @@ sudo ./run_iot_pipeline.sh
 
 sudo crontab -e 
 
-*/2 * * * * /home/sree/iot_cron_project/run_iot_pipeline.sh >> /home/sree/iot_cron_project/cron.log 2>&1 
+*/2 * * * * /home/msis/LinuxCommnadsScriptsUtilitiesServices/iot_cron_project/run_iot_pipeline.sh >> /home/msis/LinuxCommnadsScriptsUtilitiesServices/iot_cron_project/cron.log 2>&1 
 
 This runs for ever 2 minutes. 
 
