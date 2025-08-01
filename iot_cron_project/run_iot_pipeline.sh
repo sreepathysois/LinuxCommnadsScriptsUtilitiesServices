@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/msis/iot_cron_project
+cd /home/msis/LinuxCommnadsScriptsUtilitiesServices/iot_cron_project
 
 echo "=== IoT Pipeline Started: $(date) ===" >> cron.log
 
